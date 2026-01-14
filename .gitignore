@@ -1,0 +1,18 @@
+# Nextflow cache and logs
+.nextflow/
+.nextflow.log
+
+# Working directory (contains intermediate files)
+work/
+
+# macOS system files
+.DS_Store
+
+# Output directories (if you want to keep results local)
+results/
+output/
+
+# Large data files (if any input data is in the repo)
+*.fastq.gz
+*.bam
+*.vcf
