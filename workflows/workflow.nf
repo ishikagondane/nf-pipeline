@@ -1,5 +1,5 @@
 include { FASTQC }   from '../modules/fastqc.nf'
-// include { CUTADAPT } from '../modules/cutadapt.nf'
+include { CUTADAPT } from '../modules/cutadapt.nf'
 
 workflow TRIM_AND_QC {
 
@@ -9,7 +9,7 @@ workflow TRIM_AND_QC {
 
     FASTQC(reads)
 
-    // trimmed = CUTADAPT(reads)
+    trimmed = CUTADAPT(reads)
 
-    // FASTQC(trimmed)
+    FASTQC(trimmed)
 }
