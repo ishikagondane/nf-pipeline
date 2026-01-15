@@ -1,6 +1,6 @@
-// This module will throw an error. Rectify it.
+
 process CUTADAPT {
-    publishDir "alignment_metrics", mode: 'copy'
+    publishDir "${params.output}/trimmed_reads", mode: 'copy'
 
     input:
     path file
