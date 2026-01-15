@@ -53,7 +53,3 @@ The pipeline will:
 ## Extending the Pipeline
 
 To enable trimming, uncomment the relevant lines in `workflows/workflow.nf` and ensure Cutadapt is installed.
-
-## License
-
-This project is provided as-is without any warranty. Please check individual tool licenses for usage restrictions.
