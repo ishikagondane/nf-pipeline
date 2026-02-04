@@ -1,55 +1,107 @@
 # NF-Pipeline
 
-A Nextflow-based bioinformatics pipeline for quality control of FASTQ sequencing files using FastQC.
+A Nextflow-based bioinformatics pipeline for quality control, trimming, alignment, and variant calling of FASTQ sequencing files.
 
 ## Description
 
-This pipeline processes FASTQ files from a specified directory, performs quality control analysis using FastQC, and publishes the results to an output directory. It is designed to be modular and extensible, with support for additional processing steps like trimming with Cutadapt (currently commented out).
+This pipeline is designed for processing next-generation sequencing (NGS) data. It automates the complete analysis workflow from raw sequencing reads to variant discovery.
+The pipeline performs the following sequential steps:
+1. **FASTQC**: Analyzes raw reads for quality metrics and generates HTML reports.
+2. **CUTADAPT**: Removes adapter sequences and low-quality bases from reads.
+3. **BWA-MEM**: Maps trimmed reads to a reference genome and produces SAM files.
+4. **BCFtools**: Identifies genetic variants (SNPs/indels) and generates VCF files.
 
 ## Prerequisites
 
-- [Nextflow](https://www.nextflow.io/) installed
-- [FastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) installed and accessible via the path specified in `nextflow.config`
-- (Optional) [Cutadapt](https://cutadapt.readthedocs.io/en/stable/) for trimming (currently disabled)
+- [Nextflow](https://www.nextflow.io/)
+- [Conda](https://docs.conda.io/) for environment management
+- Tools: FastQC, CUTADAPT, BWA, BCFtools, Samtools
 
 ## Installation
 
-1. Clone or download this repository.
-2. Ensure Nextflow is installed: `curl -s https://get.nextflow.io | bash`
-3. Install FastQC and update the `fastqc_bin` path in `nextflow.config` if necessary.
+```bash
+# Clone the repository
+git clone https://github.com/ishikagondane/nf-pipeline
+cd nf-pipeline
+
+# Create Conda environment
+conda env create -f environment.yml
+
+# Activate the environment
+conda activate bioinfo
+```
 
 ## Configuration
 
-Edit `nextflow.config` to set the following parameters:
+Edit nextflow.config to set:
 
-- `fastq_dir`: Path to the directory containing input FASTQ files (e.g., `/path/to/fastq/files`)
-- `output`: Path to the output directory for results (e.g., `/path/to/output`)
-- `fastqc_bin`: Path to the FastQC executable (default: `/opt/homebrew/bin/fastqc`)
-- `cutadapt_bin`: Path to the Cutadapt executable (for future use)
+**Input/Output
+
+- fastq_dir: Path to the directory containing input FASTQ files
+- output: Path to the output directory for results
+
+**Tool Binaries
+
+- fastqc_bin: Path to FastQC executable
+- cutadapt_bin: Path to CUTADAPT executable
+- bwa_bin: Path to BWA executable
+- bcftools_bin: Path to BCFtools executable
+
+**Analysis Parameters
+
+- reference: Path to reference genome FASTA file
+- adapter: Adapter sequence for trimming (e.g., "AGATCGGAAGAG")
+
 
 ## Usage
 
-Run the pipeline with:
+- Run the pipeline with:
 
 ```bash
 nextflow run main.nf
 ```
+- To resume a previous run:
 
-The pipeline will:
+```bash
+nextflow run main.nf -resume
+```
 
-1. Read all `.fastq.gz` files from the specified `fastq_dir`
-2. Run FastQC on each file
-3. Publish FastQC reports to `${output}/fastqc`
+## Pipeline Flow
+Raw FASTQ Files
+       ↓
+   FASTQC (Quality Control)
+       ↓
+  CUTADAPT (Adapter Trimming)
+       ↓
+ BWA_ALIGN (Read Alignment)
+       ↓
+VARIANT_CALLING (SNP Detection)
 
 ## Output
 
-- FastQC HTML reports and zip files in the `fastqc` subdirectory of the output directory
+- ${output}/fastqc: FastQC reports
+- ${output}/trimmed_reads: Trimmed FASTQ files
+- ${output}/aligned: Aligned SAM files
+- ${output}/variants: VCF files with detected variants
 
 ## Modules
 
 - `FASTQC`: Performs quality control analysis on FASTQ files
-- `CUTADAPT`: Trimming module (currently commented out in the workflow)
+- `CUTADAPT`: Trimming module 
+- `BWA_A`:  long-read alignment module
+- `VARIANT_C`: Genetic variants identifier
 
-## Extending the Pipeline
-
-To enable trimming, uncomment the relevant lines in `workflows/workflow.nf` and ensure Cutadapt is installed.
+## Repository Structure
+nf-pipeline/
+├── main.nf                  # Entry point
+├── nextflow.config          # Configuration file
+├── bioinfo.yml              # Conda environment specification
+├── README.md                # This file
+├── .gitignore               # Git ignore rules
+├── workflows/
+│   └── workflow.nf          # Main workflow definition
+└── modules/
+    ├── fastqc.nf            # FASTQC module
+    ├── cutadapt.nf         # CUTADAPT module
+    ├── alignment.nf        # BWA alignment module
+    └── variant_calling.nf  # BCFtools variant calling module

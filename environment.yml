@@ -1,0 +1,12 @@
+name: bioinfo
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - nextflow
+  - fastqc
+  - cutadapt
+  - bwa
+  - bcftools
+  - samtools

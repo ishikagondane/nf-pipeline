@@ -10,7 +10,7 @@ process CUTADAPT {
 
     script:
     """
-    cutadapt \
+    ${params.cutadapt_bin} \
         -a ${params.adapter} \
         -o ${file.baseName}.trimmed.fastq.gz \
         $file
