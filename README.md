@@ -35,20 +35,17 @@ conda activate bioinfo
 
 Edit nextflow.config to set:
 
-**Input/Output
-
+Input/Output
 - fastq_dir: Path to the directory containing input FASTQ files
 - output: Path to the output directory for results
 
-**Tool Binaries
-
+Tool Binaries
 - fastqc_bin: Path to FastQC executable
 - cutadapt_bin: Path to CUTADAPT executable
 - bwa_bin: Path to BWA executable
 - bcftools_bin: Path to BCFtools executable
 
-**Analysis Parameters
-
+Analysis Parameters
 - reference: Path to reference genome FASTA file
 - adapter: Adapter sequence for trimming (e.g., "AGATCGGAAGAG")
 
@@ -67,6 +64,7 @@ nextflow run main.nf -resume
 ```
 
 ## Pipeline Flow
+```text
 Raw FASTQ Files
        ↓
    FASTQC (Quality Control)
@@ -76,6 +74,7 @@ Raw FASTQ Files
  BWA_ALIGN (Read Alignment)
        ↓
 VARIANT_CALLING (SNP Detection)
+```
 
 ## Output
 
@@ -92,6 +91,7 @@ VARIANT_CALLING (SNP Detection)
 - `VARIANT_C`: Genetic variants identifier
 
 ## Repository Structure
+```text
 nf-pipeline/
 ├── main.nf                  # Entry point
 ├── nextflow.config          # Configuration file
@@ -102,6 +102,7 @@ nf-pipeline/
 │   └── workflow.nf          # Main workflow definition
 └── modules/
     ├── fastqc.nf            # FASTQC module
-    ├── cutadapt.nf         # CUTADAPT module
-    ├── alignment.nf        # BWA alignment module
-    └── variant_calling.nf  # BCFtools variant calling module
+    ├── cutadapt.nf          # CUTADAPT module
+    ├── alignment.nf         # BWA alignment module
+    └── variant_calling.nf   # BCFtools variant calling module
+```
